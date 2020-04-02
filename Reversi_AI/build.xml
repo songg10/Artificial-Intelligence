@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="run" name="Reversi_AI">
+	<target name="run" depends="compile">
+		<java classname="ca.main.Main">
+			<classpath path="out"/>
+		</java>
+	</target>
+	<target name="compile">
+		<javac includeantruntime="false" srcdir="./src" destdir="out" />
+	</target>
+</project>
