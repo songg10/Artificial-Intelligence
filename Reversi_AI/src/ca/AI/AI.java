@@ -1,6 +1,5 @@
 package ca.AI;
 import ca.reversi.Board;
-
 import java.util.HashSet;
 import java.util.Random;
 
@@ -16,6 +15,7 @@ public class AI {
         int most_win=0;
         for(Board.Point mov:rec){
             if (mov.win>=most_win){
+                most_win=mov.win;
                 max=mov;
             }
         }
@@ -25,20 +25,24 @@ public class AI {
 
 
 
-    public static void playout(Board b) {
-        Board.Point move = b.new Point(-1, -1);
-        rec = b.getPlaceableLocations('B', 'W');
+    public static void playout(Board board) {
+        Board.Point move = board.new Point(-1, -1);
+        rec = board.getPlaceableLocations('B', 'W');
 
         int result;
         Boolean skip;
         char end_game = '0';
+        int count=0;
+
         for(Board.Point mov:rec)
         {
-            b.placeMove(mov,'B','W');
-            for(int i=0;i<3000;i++){
+            Board b1 = new Board(board);
+            b1.placeMove(mov,'B','W');
+            for(int i=0;i<1000;i++){
+                Board b = new Board(b1);
                 while (true) {
-                    skip = false;
 
+                    skip = false;
                     HashSet<Board.Point>  whitePlaceableLocations = b.getPlaceableLocations('W', 'B');
                     HashSet<Board.Point>  blackPlaceableLocations = b.getPlaceableLocations('B', 'W');
 
@@ -104,7 +108,7 @@ public class AI {
                                 move = obj;
                                 break;
                             }
-                            i++;
+                            index++;
 
                         }
                         b.placeMove(move, 'B', 'W');
@@ -113,14 +117,15 @@ public class AI {
                     b.updateScores();
 
                 }
-
+                if (end_game == 'B')
+                    mov.win++;
+                else if (end_game == 'W')
+                    mov.lose++;
+                else if (end_game =='D')
+                    mov.draw++;
 
             }
-            if (end_game == 'B')
-                mov.win++;
-            else if (end_game=='W')
-                mov.lose++;
-            else mov.draw++;
+
         }
         System.out.println("end playout");
     }
