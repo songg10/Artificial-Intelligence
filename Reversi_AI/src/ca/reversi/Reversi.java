@@ -4,9 +4,10 @@ import java.util.Scanner;
 import java.util.Set;
 import ca.AI.AI;
 import ca.AI.EnhancedAI;
+import ca.main.Main;
 
 public class Reversi {
-    public static void twoPlayers(Board b){
+    public static void initGame(Board b, int option){
         Scanner scan = new Scanner(System.in);
         Board.Point move = b.new Point(-1, -1);
         System.out.println("Black Moves first");
@@ -24,9 +25,9 @@ public class Reversi {
             b.showPlaceableLocations(blackPlaceableLocations, 'B', 'W');
             result = b.gameResult(whitePlaceableLocations, blackPlaceableLocations);
 
-            if(result == 0){System.out.println("It is a draw.");break;}
-            else if(result==1){System.out.println("White wins: "+b.WScore+":"+b.BScore);break;}
-            else if(result==-1){System.out.println("Black wins: "+b.BScore+":"+b.WScore);break;}
+            if(result==0){System.out.println("It is a draw."); Main.draw++; break;}
+            else if(result==1){System.out.println("White wins: "+b.WScore+":"+b.BScore); Main.white_win++; break;}
+            else if(result==-1){System.out.println("Black wins: "+b.BScore+":"+b.WScore); Main.black_win++;break;}
 
             if(blackPlaceableLocations.isEmpty()){
                 System.out.println("Black needs to skip... Passing to white");
@@ -40,13 +41,6 @@ public class Reversi {
 
                 newAI.playout(newb);
                 move=newAI.chooseMove();
-
-                while(!blackPlaceableLocations.contains(move)){
-                    System.out.println("Invalid move!\n\nPlace move (Black): ");
-                    input = scan.next();
-                    move.y = b.coordinateX(input.charAt(0));
-                    move.x = Integer.parseInt((input.charAt(1)+""))-1;
-                }
                 b.placeMove(move, 'B', 'W');
                 b.updateScores();
                 System.out.println("\nBlack: "+b.BScore+" White: "+b.WScore);
@@ -59,9 +53,9 @@ public class Reversi {
             b.showPlaceableLocations(whitePlaceableLocations, 'W', 'B');
             result = b.gameResult(whitePlaceableLocations, blackPlaceableLocations);
 
-            if(result==0){System.out.println("It is a draw.");break;}
-            else if(result==1){System.out.println("White wins: "+b.WScore+":"+b.BScore);break;}
-            else if(result==-1){System.out.println("Black wins: "+b.BScore+":"+b.WScore);break;}
+            if(result==0){System.out.println("It is a draw."); Main.draw++; break;}
+            else if(result==1){System.out.println("White wins: "+b.WScore+":"+b.BScore); Main.white_win++; break;}
+            else if(result==-1){System.out.println("Black wins: "+b.BScore+":"+b.WScore); Main.black_win++;break;}
 
             if(whitePlaceableLocations.isEmpty()){
                 System.out.println("White needs to skip... Passing to Black");
@@ -70,17 +64,26 @@ public class Reversi {
 
             if(!skip){
                 System.out.println("Place move (White): ");
-                Board newb = new Board(b);
-                EnhancedAI newAI = new EnhancedAI();
+                if (option == 2) {
+                    Board newb = new Board(b);
+                    EnhancedAI newAI = new EnhancedAI();
 
-                newAI.playout(newb);
-                move=newAI.chooseMove();
+                    newAI.playout(newb);
+                    move = newAI.chooseMove();
+                }
 
-                while(!whitePlaceableLocations.contains(move)){
-                    System.out.println("Invalid move!\n\nPlace move (White): ");
+                else {
+                    System.out.println("Place move (Black): ");
                     input = scan.next();
                     move.y = b.coordinateX(input.charAt(0));
-                    move.x = (Integer.parseInt(input.charAt(1)+"")-1);
+                    move.x = (Integer.parseInt(input.charAt(1) + "") - 1);
+
+                    while (!whitePlaceableLocations.contains(move)) {
+                        System.out.println("Invalid move!\n\nPlace move (White): ");
+                        input = scan.next();
+                        move.y = b.coordinateX(input.charAt(0));
+                        move.x = (Integer.parseInt(input.charAt(1) + "") - 1);
+                    }
                 }
                 b.placeMove(move, 'W', 'B');
                 b.updateScores();
