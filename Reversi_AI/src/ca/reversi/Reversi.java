@@ -2,6 +2,7 @@ package ca.reversi;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+import ca.AI.AI;
 
 public class Reversi {
     public static void twoPlayers(Board b){
@@ -33,9 +34,11 @@ public class Reversi {
 
             if(!skip){
                 System.out.println("Place move (Black): ");
-                input = scan.next();
-                move.y = b.coordinateX(input.charAt(0));
-                move.x = (Integer.parseInt(input.charAt(1)+"")-1);
+                Board newb = new Board(b);
+                AI newAI = new AI();
+
+                newAI.playout(newb);
+                move=newAI.chooseMove();
 
                 while(!blackPlaceableLocations.contains(move)){
                     System.out.println("Invalid move!\n\nPlace move (Black): ");
@@ -81,5 +84,6 @@ public class Reversi {
                 System.out.println("\nWhite: "+b.WScore+" Black: "+b.BScore);
             }
         }
+
     }
 }
