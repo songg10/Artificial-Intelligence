@@ -1,33 +1,35 @@
 package ca.AI;
 import ca.reversi.Board;
-import java.util.HashSet;
-import java.util.Random;
+
+import java.util.*;
+
+import static java.lang.Math.abs;
 
 
 public class EnhancedAI {
 
     static HashSet<Board.Point> rec = new HashSet<>();
     private static final char boardX[] = new char[]{'A','B','C','D','E','F','G','H'};
-    private static  final double weightedBoard [][] = new double[] [] {
-            {1,-0.2,0.1,0.05,0.05,0.1,-0.2,1},
-            {-0.2,-0.3,-0.02,-0.02,-0.02,-0.02,-0.3,-0.2,},
-            {0.1,-0.02,0.1,0.1,0.1,0.1,-0.02,0.1,},
-            {0.05,-0.02,0.1,0.1,0.1,0.1,-0.02,0.05,},
-            {0.05,-0.02,0.1,0.1,0.1,0.1,-0.02,0.05,},
-            {0.1,-0.02,0.1,0.1,0.1,0.1,-0.02,0.1,},
-            {-0.2,-0.3,-0.02,-0.02,-0.02,-0.02,-0.3,-0.2,},
-            {1,-0.2,0.1,0.05,0.05,0.1,-0.2,1}
+    private static  final int weightedBoard [][] = new int[] [] {
+            {100, -1, 5, 2, 2, 5, -1, 100,},
+            {-1, -10, 1, 1, 1, 1, -10, -1,},
+            {5, 1, 1, 1, 1, 1, 1, 5,},
+            {2 , 1, 1, 0, 0, 1, 1, 2,},
+            {2, 1, 1, 0, 0, 1, 1, 2,},
+            {5, 1, 1, 1, 1, 1, 1, 1,},
+            {-1, -10 , 1, 1, 1, 1, -10, -1,},
+            {100, -1, 5, 2, 2, 5, -1, 100,},
     };
 
     public static Board.Point chooseMove(){
         Board.Point max = null;
         double most_win=0;
-        for(Board.Point mov:rec){
-            //System.out.println(mov.win+" "+mov.lose+ " "+mov.draw);
-            //System.out.println("Whi: "+ boardX[mov.y]+(mov.x+1)+" win: "+mov.win+", weighted: "+(mov.win+mov.win*weightedBoard[mov.x][mov.y]/2));
-            if (mov.win+mov.win*3*weightedBoard[mov.x][mov.y]/4>=most_win){
-                max=mov;
-                most_win=mov.win+mov.win*3*weightedBoard[mov.x][mov.y]/4;
+
+
+        for(Board.Point mov1:rec){
+            if (abs(mov1.win+weightedBoard[mov1.x][mov1.y])>=most_win){
+                max=mov1;
+                most_win=mov1.win+weightedBoard[mov1.x][mov1.y];
             }
         }
         System.out.println("White's move: "+ boardX[max.y]+(max.x+1));
