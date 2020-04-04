@@ -73,7 +73,6 @@ public class Reversi {
                 }
 
                 else {
-                    System.out.println("Place move (Black): ");
                     input = scan.next();
                     move.y = b.coordinateX(input.charAt(0));
                     move.x = (Integer.parseInt(input.charAt(1) + "") - 1);
